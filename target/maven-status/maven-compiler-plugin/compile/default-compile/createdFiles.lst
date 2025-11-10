@@ -1,0 +1,10 @@
+com\smartinventorymanagement\controller\ViewController.class
+com\smartinventorymanagement\config\MongoConfig.class
+com\smartinventorymanagement\repository\InventoryRepository.class
+com\smartinventorymanagement\repository\RestockRepository.class
+com\smartinventorymanagement\model\InventoryItem.class
+com\smartinventorymanagement\SmartInventoryManagementApplication.class
+com\smartinventorymanagement\client\InventoryClient.class
+com\smartinventorymanagement\controller\InventoryController.class
+com\smartinventorymanagement\service\InventoryService.class
+com\smartinventorymanagement\model\RestockRequest.class

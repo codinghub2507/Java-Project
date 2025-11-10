@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Smart Inventory Dashboard</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Local -->
+    <link rel="stylesheet" th:href="@{/css/all.min.css}">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* Base Styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            background: #fdf6e3; /* light beige */
+            color: #333;
+        }
+
+        /* Page Heading */
+        .heading {
+            text-align: center;
+            margin: 30px 0 5px 0;
+            font-size: 40px;
+            font-weight: 700;
+            color: #4b3f2f;
+        }
+
+        .subtitle {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 400;
+            color: #6b5e4d;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background: #d6c6aa;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        nav a {
+            color: #4b3f2f;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            padding: 5px 10px;
+            border-radius: 8px;
+            transition: background 0.3s, color 0.3s;
+        }
+        nav a i { margin-right: 8px; }
+        nav a:hover {
+            color: #fff;
+            background: #4b3f2f;
+        }
+
+        /* Container */
+        .container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 50px 20px;
+            gap: 20px;
+        }
+
+        /* Card Styles */
+        .card {
+            background: #fff9f0;
+            border-radius: 20px;
+            padding: 30px;
+            width: 260px;
+            text-align: center;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+            margin: 15px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 35px rgba(0,0,0,0.2);
+        }
+        .card i {
+            font-size: 40px;
+            color: #c4a467;
+            margin-bottom: 10px;
+        }
+        .card h2 {
+            margin: 10px 0;
+            font-size: 32px;
+            color: #4b3f2f;
+        }
+        .card p {
+            font-size: 16px;
+            color: #6b5e4d;
+            margin: 0;
+        }
+        .card .extra {
+            font-size: 14px;
+            color: #9e8f7e;
+            margin-top: 8px;
+        }
+
+        /* Chart container */
+        .chart-container {
+            background: #fff9f0;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+            margin: 50px 20px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #d6c6aa;
+            color: #4b3f2f;
+            margin-top: 50px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Page Heading -->
+<div class="heading">Smart Inventory Management</div>
+<div class="subtitle">Efficiently manage your inventory, sales, and stock levels</div>
+
+<!-- Navigation -->
+<nav>
+    <a th:href="@{/}"><i class="fas fa-home"></i> Dashboard</a>
+    <a th:href="@{/inventory/list}"><i class="fas fa-boxes"></i> Inventory</a>
+    <a th:href="@{/inventory/add}"><i class="fas fa-plus-circle"></i> Add Item</a>
+    <a th:href="@{/inventory/sell}"><i class="fas fa-shopping-cart"></i> Sell Item</a>
+    <a th:href="@{/inventory/restock}"><i class="fas fa-sync-alt"></i> Restock</a>
+</nav>
+
+<!-- Stats Cards -->
+<div class="container">
+    <div class="card">
+        <i class="fas fa-box"></i>
+        <h2 th:text="${totalItems}">0</h2>
+        <p>Total Items</p>
+        <div class="extra">All inventory items in your system</div>
+    </div>
+    <div class="card">
+        <i class="fas fa-exclamation-triangle"></i>
+        <h2 th:text="${lowStock}">0</h2>
+        <p>Low Stock Items</p>
+        <div class="extra">Items running out soon</div>
+    </div>
+    <div class="card">
+        <i class="fas fa-dollar-sign"></i>
+        <h2 th:text="${soldToday}">0</h2>
+        <p>Sold Today</p>
+        <div class="extra">Total sales recorded today</div>
+    </div>
+</div>
+
+<!-- Sales Chart -->
+<div class="chart-container">
+    <canvas id="salesChart" height="100"></canvas>
+</div>
+
+<script>
+    const ctx = document.getElementById('salesChart').getContext('2d');
+    const salesChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: /*[[${productNames}]]*/ ['Item1', 'Item2', 'Item3'], // replace with Thymeleaf list
+            datasets: [{
+                label: 'Units Sold',
+                data: /*[[${productSales}]]*/ [12, 5, 20], // replace with Thymeleaf list
+                backgroundColor: '#c4a467',
+                borderColor: '#4b3f2f',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                title: { display: true, text: 'Product Sales Overview' }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+<!-- Footer -->
+<footer>
+    &copy; 2025 Smart Inventory Management. All Rights Reserved.
+</footer>
+
+</body>
+</html>

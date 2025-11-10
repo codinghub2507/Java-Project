@@ -1,0 +1,10 @@
+C:\JavaProjects\SmartInventoryManagement\src\main\java\com\smartinventorymanagement\client\InventoryClient.java
+C:\JavaProjects\SmartInventoryManagement\src\main\java\com\smartinventorymanagement\controller\ViewController.java
+C:\JavaProjects\SmartInventoryManagement\src\main\java\com\smartinventorymanagement\controller\InventoryController.java
+C:\JavaProjects\SmartInventoryManagement\src\main\java\com\smartinventorymanagement\SmartInventoryManagementApplication.java
+C:\JavaProjects\SmartInventoryManagement\src\main\java\com\smartinventorymanagement\repository\InventoryRepository.java
+C:\JavaProjects\SmartInventoryManagement\src\main\java\com\smartinventorymanagement\model\InventoryItem.java
+C:\JavaProjects\SmartInventoryManagement\src\main\java\com\smartinventorymanagement\service\InventoryService.java
+C:\JavaProjects\SmartInventoryManagement\src\main\java\com\smartinventorymanagement\model\RestockRequest.java
+C:\JavaProjects\SmartInventoryManagement\src\main\java\com\smartinventorymanagement\config\MongoConfig.java
+C:\JavaProjects\SmartInventoryManagement\src\main\java\com\smartinventorymanagement\repository\RestockRepository.java

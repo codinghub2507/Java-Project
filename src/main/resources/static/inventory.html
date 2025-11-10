@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inventory Manager</title>
+</head>
+<body>
+<h1>Inventory Manager</h1>
+
+<!-- Form to add/edit inventory item -->
+<form id="inventoryForm">
+    <input type="hidden" id="itemId">
+    Name: <input type="text" id="name" required><br><br>
+    Quantity: <input type="number" id="quantity" required><br><br>
+    Price: <input type="number" id="price" step="0.01" required><br><br>
+    <button type="submit">Save Item</button>
+    <button type="button" id="cancelEdit" style="display:none;">Cancel Edit</button>
+</form>
+
+<h2>Current Inventory</h2>
+<ul id="inventoryList"></ul>
+
+<script>
+    const form = document.getElementById('inventoryForm');
+    const list = document.getElementById('inventoryList');
+    const cancelBtn = document.getElementById('cancelEdit');
+
+    // Load current inventory
+    function loadInventory() {
+        list.innerHTML = '';
+        fetch('/inventory')
+            .then(res => res.json())
+            .then(data => {
+                data.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = `${item.name} - Quantity: ${item.quantity}, Price: ₹${item.price}`;
+
+                    // Edit button
+                    const editBtn = document.createElement('button');
+                    editBtn.textContent = 'Edit';
+                    editBtn.onclick = () => editItem(item);
+                    li.appendChild(editBtn);
+
+                    // Delete button
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = 'Delete';
+                    deleteBtn.onclick = () => deleteItem(item.id);
+                    li.appendChild(deleteBtn);
+
+                    list.appendChild(li);
+                });
+            });
+    }
+
+    loadInventory();
+
+    // Add or update item
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const id = document.getElementById('itemId').value;
+        const item = {
+            name: document.getElementById('name').value,
+            quantity: parseInt(document.getElementById('quantity').value),
+            price: parseFloat(document.getElementById('price').value)
+        };
+
+        const method = id ? 'PUT' : 'POST';
+        const url = id ? `/inventory/${id}` : '/inventory';
+
+        fetch(url, {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(item)
+        })
+            .then(res => res.json())
+            .then(() => {
+                form.reset();
+                document.getElementById('itemId').value = '';
+                cancelBtn.style.display = 'none';
+                loadInventory();
+            });
+    });
+
+    // Edit item
+    function editItem(item) {
+        document.getElementById('itemId').value = item.id;
+        document.getElementById('name').value = item.name;
+        document.getElementById('quantity').value = item.quantity;
+        document.getElementById('price').value = item.price;
+        cancelBtn.style.display = 'inline';
+    }
+
+    // Cancel edit
+    cancelBtn.onclick = () => {
+        form.reset();
+        document.getElementById('itemId').value = '';
+        cancelBtn.style.display = 'none';
+    };
+
+    // Delete item
+    function deleteItem(id) {
+        fetch(`/inventory/${id}`, { method: 'DELETE' })
+            .then(() => loadInventory());
+    }
+</script>
+</body>
+</html>

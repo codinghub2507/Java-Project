@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sell Item</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/all.min.css}">
+    <style>
+        body { font-family: 'Roboto', sans-serif; margin: 0; background: #fdf6e3; color: #333; }
+        nav { background: #d6c6aa; display: flex; justify-content: space-around; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        nav a { color: #4b3f2f; text-decoration: none; font-weight: 600; display: flex; align-items: center; padding: 5px 10px; border-radius: 8px; transition: background 0.3s, color 0.3s; }
+        nav a i { margin-right: 8px; }
+        nav a:hover { background: #4b3f2f; color: #fff; }
+        .container { max-width: 600px; margin: 50px auto; background: #fff9f0; padding: 30px; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #4b3f2f; margin-bottom: 30px; }
+        form { display: flex; flex-direction: column; gap: 20px; }
+        select, input { padding: 12px; border: 1px solid #d6c6aa; border-radius: 8px; font-size: 16px; }
+        button { padding: 12px; border: none; border-radius: 8px; background: #ef4444; color: #fff; font-weight: 600; cursor: pointer; transition: background 0.3s; }
+        button:hover { background: #dc2626; }
+        footer { text-align: center; padding: 20px; background: #d6c6aa; color: #4b3f2f; margin-top: 50px; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a th:href="@{/}"><i class="fas fa-home"></i> Dashboard</a>
+    <a th:href="@{/inventory/list}"><i class="fas fa-boxes"></i> Inventory</a>
+    <a th:href="@{/inventory/add}"><i class="fas fa-plus-circle"></i> Add Item</a>
+    <a th:href="@{/inventory/sell}"><i class="fas fa-shopping-cart"></i> Sell Item</a>
+    <a th:href="@{/inventory/restock}"><i class="fas fa-sync-alt"></i> Restock</a>
+</nav>
+
+<div class="container">
+    <h1>Sell Item</h1>
+    <form th:action="@{/inventory/sell}" method="post">
+        <select name="itemId" required>
+            <option value="" disabled selected>Select Item</option>
+            <option th:each="item : ${items}" th:value="${item.id}" th:text="${item.name}">Item</option>
+        </select>
+        <input type="number" name="quantity" placeholder="Quantity to Sell" min="1" required>
+        <button type="submit"><i class="fas fa-shopping-cart"></i> Sell Item</button>
+    </form>
+</div>
+
+<footer>
+    &copy; 2025 Smart Inventory Management
+</footer>
+
+</body>
+</html>
